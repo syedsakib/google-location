@@ -9,9 +9,11 @@ const HomePage = () => {
 
   const getLocationDetails = (position) => {
     const { latitude, longitude } = position.coords;
+    const lat = parseFloat(latitude);
+    const lon = parseFloat(longitude);
     setUserLocation({
-      latitude,
-      longitude,
+      latitude: lat,
+      longitude: lon,
     });
   };
 
@@ -26,9 +28,9 @@ const HomePage = () => {
     getLocation();
   }, []);
 
-  //console.log(userLocation);
-
-  return <>{userLocation && <MapComponent userLocation={userLocation} />}</>;
+  return (
+    <div>{userLocation && <MapComponent userLocation={userLocation} />}</div>
+  );
 };
 
 export default HomePage;

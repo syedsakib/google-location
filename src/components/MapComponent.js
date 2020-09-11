@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
-
-import ModalComponent from './ModalComponent';
-//import Modal from 'react-modal';
+import NewModal from './NewModal';
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    padding: '50px',
+  },
+};
 
 const MapComponent = (userLocation) => {
-  const [modal, setmodal] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: 'AIzaSyD3wm5QdlolRqcAUp0hxg2e_ExSFOhENLE',
   });
@@ -17,40 +27,40 @@ const MapComponent = (userLocation) => {
     height: '100vh',
   };
 
-  //console.log(userLocation.userLocation);
   const { latitude, longitude } = userLocation.userLocation;
-  //console.log(latitude);
+  const lat = parseFloat(latitude);
+  const lon = parseFloat(longitude);
+  const openModal = () => {
+    setIsOpen(true);
+  };
 
-  //
-  const onClick = () => {
-    setmodal(false);
+  const closeModal = () => {
+    setIsOpen(false);
   };
 
   return (
-    <div>
+    <div style={{ zindex: -1 }}>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={15}
-        center={{ lat: latitude, lng: longitude }}
+        center={{ lat: lat, lng: lon }}
       >
         {
           <Marker
-            onClick={() => console.log('000')}
-            position={{ lat: latitude, lng: longitude }}
+            onClick={() => openModal()}
+            position={{ lat: lat, lng: lon }}
           />
         }
       </GoogleMap>
 
-      {/* <button onClick={() => setmodal(true)}>Close</button> */}
-
-      {modal ? (
-        <ModalComponent
+      <div>
+        <NewModal
+          modalIsOpen={modalIsOpen}
+          closeModal={closeModal}
+          customStyles={customStyles}
           userLocation={userLocation.userLocation}
-          onClick={onClick}
         />
-      ) : (
-        ''
-      )}
+      </div>
     </div>
   );
 };
